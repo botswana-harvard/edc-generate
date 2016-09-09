@@ -1,0 +1,1 @@
+name,verbose_name,datatype,max_length,required,editable,defaultfirst_name,Firstname, text,25,Yes,Yes,last_name,Lastname,text,25,Yes,Yes,gender,Gender,text_choice,25,Yes,Yes,age,Age in years,number,,Yes,Yes,tel,Telephone number,text,25,No,Yes,dob,date of Birth,date,Yes,Yes,report_datetime,Report date and time,datetime,Yes,Yes,timezone.now
