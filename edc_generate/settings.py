@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
+    'edc_protocol.apps.AppConfig',
     'edc_generate.apps.EdcBaseAppConfig',
     'edc_generate.apps.AppConfig',
 ]

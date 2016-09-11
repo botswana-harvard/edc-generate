@@ -1,0 +1,4 @@
+app_label,model_type,model_name,visit_model,consent_model
+edc_example,consent,SubjectConsent,,
+edc_example,visit,SubjectVisit,,edc_example.subject_consent
+edc_example,crf,Demographics,edc_example.subject_visit,edc_example.subject_consent

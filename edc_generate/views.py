@@ -3,7 +3,6 @@ import os
 
 from django.conf import settings
 from django.views.generic.base import TemplateView
-from django.template.loader import render_to_string
 
 from pygments import highlight
 from pygments.lexers import PythonLexer
@@ -18,36 +17,55 @@ from .model import Model
 class HomeView(EdcBaseViewMixin, TemplateView):
 
     template_name = 'edc_generate/home.html'
-    csv_filename = os.path.join(settings.MEDIA_ROOT, 'test_dd.csv')
+    csv_fields = os.path.join(settings.MEDIA_ROOT, 'test_fields.csv')
+    csv_models = os.path.join(settings.MEDIA_ROOT, 'test_models.csv')
     model_class_template = 'edc_generate/models/crf.html'
+
+    def __init__(self, **kwargs):
+        self._fields = {}
+        super(HomeView, self).__init__(**kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context.update({
-            'cls_name': 'CrfModel',
-            'bases': ['EdcBaseModelMixin'],
-            'app_label': 'test_app',
-        })
-        context.update({
-            'code': self.get_rendered_code(context)
+            'code': self.render_models(context)
         })
         return context
 
     @property
-    def data_dictionary(self):
-        data_dictionary = []
+    def models(self):
+        models = {}
         header_row = None
-        with open(self.csv_filename, newline='') as csvfile:
-            reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
+        with open(self.csv_models, newline='') as f:
+            reader = csv.DictReader(f, delimiter=',', quotechar='"')
             for row in reader:
                 if not header_row:
                     header_row = row
                 else:
-                    data_dictionary.append(Field(row))
-        return data_dictionary
+                    print(row['model_name'])
+                    print('fields={}'.format(self.fields))
+                    model = Model(row['model_name'], fields=self.fields.get(row['model_name']), **row)
+                    models.update({row['model_name']: model})
+        return models
 
-    def get_rendered_code(self, context):
-        field_attrs = [field.format() for field in self.data_dictionary]
-        code = Model(context.get('cls_name'), context.get('bases'),
-                     field_attrs, {'app_label': 'test_app'}).to_string()
-        return highlight(code, PythonLexer(), HtmlFormatter())
+    @property
+    def fields(self):
+        if not self._fields:
+            header_row = None
+            with open(self.csv_fields, newline='') as f:
+                reader = csv.DictReader(f, delimiter=',', quotechar='"')
+                for row in reader:
+                    if not header_row:
+                        header_row = row
+                    else:
+                        try:
+                            self._fields[row['model']].append(Field(row))
+                        except KeyError:
+                            self._fields[row['model']] = [Field(row)]
+        return self._fields
+
+    def render_models(self, context):
+        rendered = ''
+        for model in self.models.values():
+            rendered += highlight(model.to_string(), PythonLexer(), HtmlFormatter())
+        return rendered
