@@ -1,0 +1,6 @@
+include AUTHORS CHANGES README.md LICENCE
+recursive-include edc_generate/templates *
+recursive-include edc_generate/static *
+recursive-include media/edc_generate/ *
+recursive-include docs *
+recursive-exclude etc/*
