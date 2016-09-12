@@ -1,0 +1,7 @@
+app_label,model_type,model_name,visit_model,consent_model
+banamotswe,visit,SubjectVisit,,
+banamotswe,crf,Enrollment,,
+banamotswe,crf,Appointment,banamotswe.subject_visit,
+banamotswe,crf,Abstraction,banamotswe.subject_visit,
+banamotswe,crf,AssessmentHistory,banamotswe.subject_visit,
+banamotswe,crf,Treatment,banamotswe.subject_visit,

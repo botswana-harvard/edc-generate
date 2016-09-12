@@ -1,5 +1,5 @@
 from inspect import getmodule
-from collections import OrderedDict
+
 from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin

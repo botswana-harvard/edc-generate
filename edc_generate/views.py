@@ -17,8 +17,8 @@ from .model import Model
 class HomeView(EdcBaseViewMixin, TemplateView):
 
     template_name = 'edc_generate/home.html'
-    csv_fields = os.path.join(settings.MEDIA_ROOT, 'test_fields.csv')
-    csv_models = os.path.join(settings.MEDIA_ROOT, 'test_models.csv')
+    csv_fields = os.path.join(settings.MEDIA_ROOT, 'bm_fields.csv')
+    csv_models = os.path.join(settings.MEDIA_ROOT, 'bm_models.csv')
     model_class_template = 'edc_generate/models/crf.html'
 
     def __init__(self, **kwargs):
@@ -42,8 +42,6 @@ class HomeView(EdcBaseViewMixin, TemplateView):
                 if not header_row:
                     header_row = row
                 else:
-                    print(row['model_name'])
-                    print('fields={}'.format(self.fields))
                     model = Model(row['model_name'], fields=self.fields.get(row['model_name']), **row)
                     models.update({row['model_name']: model})
         return models
